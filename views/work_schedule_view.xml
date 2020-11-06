@@ -35,7 +35,16 @@
                             <field name="project_parent"/>
                             <field name="date_start"/>
                             <field name="date_end"/>
+                            <field name="duration"/>
                         </group>
+                        <notebook>
+                            <page name="notes" string="Notes">
+                                <field name="notes"/>
+                            </page>
+                            <page name="timesheet" string="Timesheet">
+
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -45,7 +54,7 @@
             <field name="name">work_schedule.tree</field>
             <field name="model">work_schedule.model</field>
             <field name="arch" type="xml">
-                <tree string="Involvement" decoration-success="state == 'done'" decoration-danger="state == 'cancel'">
+                <tree string="Involvement" decoration-success="state == 'done'" decoration-warning="state == 'confirm'" decoration-danger="state == 'cancel'">
                     <field name="employees_ids"/>
                     <field name="project_id"/>
                     <field name="date_start"/>
@@ -64,20 +73,21 @@
                           date_stop="date_end"
                           default_group_by="employees_ids"
                           event_open_popup="true"
-                          colors="#ec7063: state == 'cancel'; #2ecb71: state == 'done';">
-                    <field name="project_id"/>
+                          colors="#ec7063: state == 'cancel'; #ffed75: state == 'confirm'; #2ecb71: state == 'done';">
+                    <field name="duration"/>
                     <field name="name"/>
+                    <field name="notes"/>
                     <templates>
                         <t t-name="timeline-item">
-                            <div class="o_project_timeline_item">
+                            <div class="o_project_timeline_item" t-att-title="record.notes">
                                 <img t-if="record.employees_ids"
                                      t-attf-src="/web/image/hr.employee/{{ record.employees_ids[0] }}/image/24x24"
                                      t-att-title="record.employees_ids[1]" width="24" height="24" class="mr8"/>
-                                <span name="display_name">
+                                <span name="display_name" style="font-weight: bold;">
                                     <t t-esc="record.display_name"/>
                                 </span>
-                                <small name="planned_hours" class="text-muted ml4">
-                                    <t t-esc="record.notes"/>
+                                <small name="planned_hours" class="ml4">
+                                    <t t-esc="record.duration"/><span class="ml4">day(s)</span>
                                 </small>
                             </div>
                         </t>

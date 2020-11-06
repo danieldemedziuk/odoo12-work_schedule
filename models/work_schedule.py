@@ -2,14 +2,20 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 import base64
+from datetime import datetime
 import logging
+import unittest
+import pytest
 
 _logger = logging.getLogger(__name__)
+
 
 class work_schedule(models.Model):
     _name = 'work_schedule.model'
     _description = 'Work schedule Model'
+    _order = 'state desc'
 
     @api.depends('project_id')
     def _get_name_fnc(self):
@@ -25,13 +31,14 @@ class work_schedule(models.Model):
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
     date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', select=True, copy=False)
+    duration = fields.Integer(compute='calc_duration', string='Duration (days)', default='0', store=True, readonly=True)
     notes = fields.Text(string='Note', help='A short note about schedule.')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
-        ], string='Status', readonly=True, default='draft')
+    ], string='Status', readonly=True, default='draft')
 
     @api.depends('project_id')
     def get_project_parent(self):
@@ -60,24 +67,30 @@ class work_schedule(models.Model):
     def action_involvement_confirm(self):
         if self.employees_ids and self.project_id and self.date_start:
             self.ensure_one()
-            # self.reset_add_line()
             self.write({'state': 'confirm'})
 
     def action_involvement_done(self):
         if self.employees_ids and self.project_id and self.date_start:
             self.ensure_one()
-            # self.reset_add_line()
             self.write({'state': 'done'})
 
     def action_involvement_draft(self):
         if self.employees_ids and self.project_id and self.date_start:
             self.ensure_one()
-            # self.reset_add_line()
             self.write({'state': 'draft'})
 
     def action_involvement_refuse(self):
         if self.employees_ids and self.project_id and self.date_start:
             self.ensure_one()
-            # self.reset_add_line()
             self.write({'state': 'cancel'})
+
+    @api.depends('date_start', 'date_end')
+    def calc_duration(self):
+        for rec in self:
+            if rec.date_start and rec.date_end:
+                date_format = "%Y-%m-%d"
+                a = datetime.strptime(str(rec.date_start), date_format)
+                b = datetime.strptime(str(rec.date_end), date_format)
+                delta = b - a
+                rec.duration = delta.days
 
