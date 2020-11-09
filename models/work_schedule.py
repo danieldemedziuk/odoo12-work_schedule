@@ -28,6 +28,7 @@ class work_schedule(models.Model):
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
     employee_id = fields.Char(compute='_get_employee_picture', readonly=True)
+    timesheet_id = fields.One2many('hr_timesheet.sheet', domain=([('user_id', '=', 'employees_ids')]), string="Timesheet", readonly=True)
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
     date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', select=True, copy=False)
@@ -94,3 +95,12 @@ class work_schedule(models.Model):
                 delta = b - a
                 rec.duration = delta.days
 
+    # def get_emp_timesheet(self):
+
+
+# class hr_timesheets_lines(models.Model):
+#     _name = 'hr_timesheets.lines'
+#     _description = 'HR Timesheets Lines'
+#     _inherit = ['hr_timesheet.sheet']
+#
+#     employee_id = fields.Many2one('hr_timesheet.sheet')

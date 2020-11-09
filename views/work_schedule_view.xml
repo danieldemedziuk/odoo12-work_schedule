@@ -2,6 +2,7 @@
 <odoo>
     <data>
 
+<!--        Form View-->
         <record id="edit_schedule" model="ir.ui.view">
             <field name="name">work_schedule.form</field>
             <field name="model">work_schedule.model</field>
@@ -42,7 +43,7 @@
                                 <field name="notes"/>
                             </page>
                             <page name="timesheet" string="Timesheet">
-
+<!--                                <field name="timesheet_id"/>-->
                             </page>
                         </notebook>
                     </sheet>
@@ -50,6 +51,7 @@
             </field>
         </record>
 
+<!--        Tree View-->
         <record id="view_project" model="ir.ui.view">
             <field name="name">work_schedule.tree</field>
             <field name="model">work_schedule.model</field>
@@ -96,7 +98,7 @@
             </field>
         </record>
 
-
+<!--        Action -->
         <record model='ir.actions.act_window' id='work_schedule_model_act'>
             <field name="name">Schedule</field>
             <field name="res_model">work_schedule.model</field>
@@ -109,6 +111,7 @@
             </field>
         </record>
 
+<!--        Menu -->
         <menuitem name="Schedule" id="work_schedule_master" sequence="110" web_icon="work_schedule,static/description/icon.png"/>
         <menuitem name="Schedule" id="work_schedule_pm" parent="work_schedule_master" sequence="40"/>
         <menuitem name="Involvement" id="work_schedule_schedule" action="work_schedule_model_act" parent="work_schedule_pm" sequence="1"/>
