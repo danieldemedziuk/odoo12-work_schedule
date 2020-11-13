@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* work_schedule
+#
+# Translators:
+# DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-13 10:07+0000\n"
+"PO-Revision-Date: 2020-11-13 10:07+0000\n"
+"Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_timeline
+msgid "<span class=\"ml4\">day(s)</span>"
+msgstr "<span class=\"ml4\">dni</span>"
+
+#. module: work_schedule
+#: model:ir.model.fields,help:work_schedule.field_work_schedule_model__notes
+msgid "A short note about schedule."
+msgstr "Krótka notatka o harmonogramie."
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__active
+msgid "Active"
+msgstr "Aktywne"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+msgid "Approve"
+msgstr "Aprobuj"
+
+#. module: work_schedule
+#: selection:work_schedule.model,state:0
+msgid "Cancel"
+msgstr "Anulowany"
+
+#. module: work_schedule
+#: model_terms:ir.actions.act_window,help:work_schedule.work_schedule_model_act
+msgid "Click to create a new schedule."
+msgstr "Kliknij, aby stworzyć nowy harmonogram."
+
+#. module: work_schedule
+#: selection:work_schedule.model,state:0
+msgid "Confirm"
+msgstr "Zatwierdzony"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__create_uid
+msgid "Created by"
+msgstr "Utworzona przez"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__create_date
+msgid "Created on"
+msgstr "Data utworzenia"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__date_start
+msgid "Date start"
+msgstr "Data rozpoczęcia"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__date_end
+msgid "Date stop"
+msgstr "Data zakończenia"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__display_name
+msgid "Display Name"
+msgstr "Nazwa wyświetlana"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: selection:work_schedule.model,state:0
+msgid "Done"
+msgstr "Wykonano"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: selection:work_schedule.model,state:0
+msgid "Draft"
+msgstr "Na projekt"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__duration
+msgid "Duration (days)"
+msgstr "Trwanie (dni)"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__employee_id
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__employees_ids
+msgid "Employee"
+msgstr "Pracownik"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__id
+msgid "ID"
+msgstr "ID"
+
+#. module: work_schedule
+#: model:ir.model.fields,help:work_schedule.field_work_schedule_model__active
+msgid "If the active field is set to False, it will allow you to hide the project without removing it."
+msgstr "Jeśli pole Aktywne jest niezaznaczone, to projekt nie będzie widoczny (nie będziesz musiał go usuwać)."
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__image
+msgid "Image"
+msgstr "Obraz"
+
+#. module: work_schedule
+#: model:ir.ui.menu,name:work_schedule.work_schedule_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.view_project
+msgid "Involvement"
+msgstr "Zaangażowanie"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model____last_update
+msgid "Last Modified on"
+msgstr "Data ostatniej modyfikacji"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__write_uid
+msgid "Last Updated by"
+msgstr "Ostatnio aktualizowane przez"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__write_date
+msgid "Last Updated on"
+msgstr "Data ostatniej aktualizacji"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__name
+msgid "Name"
+msgstr "Nazwa"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__notes
+msgid "Note"
+msgstr "Notatka"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+msgid "Notes"
+msgstr "Notatki"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__project_id
+msgid "Project"
+msgstr "Projekt"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__project_parent
+msgid "Project parent"
+msgstr "Menedżer projektu"
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+msgid "Refuse"
+msgstr "Odmów"
+
+#. module: work_schedule
+#: model:ir.actions.act_window,name:work_schedule.work_schedule_model_act
+#: model:ir.ui.menu,name:work_schedule.work_schedule_master
+#: model:ir.ui.menu,name:work_schedule.work_schedule_pm
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+msgid "Schedule"
+msgstr "Harmonogram"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__state
+msgid "Status"
+msgstr "Status"
+
+#. module: work_schedule
+#: model:res.groups,comment:work_schedule.group_work_schedule_manager
+msgid "The manager will be able to create and manage work schedule."
+msgstr "Menedżer będzie mógł tworzyć i zarządzać harmonogramem pracy."
+
+#. module: work_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+msgid "Timesheet"
+msgstr "Karta pracy"
+
+#. module: work_schedule
+#: model:res.groups,name:work_schedule.group_work_schedule_manager
+msgid "Work Schedule / Manager"
+msgstr "Harmonogram pracy / Menedżer"
+
+#. module: work_schedule
+#: model:ir.model,name:work_schedule.model_work_schedule_model
+msgid "Work schedule Model"
+msgstr "Harmonogram pracy Model"
+
