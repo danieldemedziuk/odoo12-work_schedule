@@ -15,7 +15,7 @@ The module allows you to verify vacations and availability for new tasks. It all
 
 If you need help, contact the author of the module.
 
-email: daniel.demedziuk@mjgroup.pl
+email: daniel.demedziuk@gmail.com
 """,
     'website': 'website',
     'category': 'Tool',
