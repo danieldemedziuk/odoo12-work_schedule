@@ -21,7 +21,7 @@ class work_schedule(models.Model):
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
-    type = fields.Selection([('0', 'Biuro'), ('1', 'Obiekt')], string='Miejsce wykonywania prac')
+    type = fields.Selection([('0', 'Office'), ('1', 'Facility')], string='Place of work')
     project_id = fields.Many2one('account.analytic.account', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)

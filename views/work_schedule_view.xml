@@ -55,7 +55,7 @@
             <field name="name">work_schedule.tree</field>
             <field name="model">work_schedule.model</field>
             <field name="arch" type="xml">
-               <tree string="Involvement" decoration-info="type == '1'"> <!-- decoration-success="state == 'done'" decoration-warning="state == 'confirm'" decoration-danger="state == 'cancel'">-->
+               <tree string="Involvement" decoration-info="type == '1'">
                     <field name="employees_ids"/>
                     <field name="project_id"/>
                     <field name="date_start"/>
