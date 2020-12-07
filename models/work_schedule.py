@@ -3,11 +3,8 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-import base64
 from datetime import datetime
 import logging
-import unittest
-import pytest
 
 _logger = logging.getLogger(__name__)
 
@@ -24,11 +21,11 @@ class work_schedule(models.Model):
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
+    type = fields.Selection([('0', 'Biuro'), ('1', 'Obiekt')], string='Miejsce wykonywania prac')
     project_id = fields.Many2one('account.analytic.account', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
     employee_id = fields.Char(compute='_get_employee_picture', readonly=True)
-    timesheet_id = fields.One2many('hr_timesheet.sheet', domain=([('user_id', '=', 'employees_ids')]), string="Timesheet", readonly=True)
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
     date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', select=True, copy=False)
@@ -44,8 +41,8 @@ class work_schedule(models.Model):
     @api.depends('project_id')
     def get_project_parent(self):
         for rec in self:
-            if rec.project_id['x_manager_id']:
-                rec.project_parent = rec.project_id['x_manager_id']['name']
+            if rec.project_id['manager_id']:
+                rec.project_parent = rec.project_id['manager_id']['name']
 
     @api.depends('employees_ids')
     def _get_employee_picture(self):

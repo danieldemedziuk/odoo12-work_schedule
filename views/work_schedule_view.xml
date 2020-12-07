@@ -30,6 +30,8 @@
                             <h2>
                                 <field name="employee_id"/>
                             </h2>
+                            <label for="type" class="oe_edit_only"/>
+                            <field name="type"/>
                         </div>
                         <group>
                             <field name="project_id" options="{'no_create': True, 'no_create_edit':True}"/>
@@ -42,9 +44,6 @@
                             <page name="notes" string="Notes">
                                 <field name="notes"/>
                             </page>
-                            <page name="timesheet" string="Timesheet">
-<!--                                <field name="timesheet_id"/>-->
-                            </page>
                         </notebook>
                     </sheet>
                 </form>
@@ -56,12 +55,13 @@
             <field name="name">work_schedule.tree</field>
             <field name="model">work_schedule.model</field>
             <field name="arch" type="xml">
-                <tree string="Involvement" decoration-success="state == 'done'" decoration-warning="state == 'confirm'" decoration-danger="state == 'cancel'">
+               <tree string="Involvement" decoration-info="type == '1'"> <!-- decoration-success="state == 'done'" decoration-warning="state == 'confirm'" decoration-danger="state == 'cancel'">-->
                     <field name="employees_ids"/>
                     <field name="project_id"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
                     <field name="state"/>
+                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -73,12 +73,14 @@
             <field name="arch" type="xml">
                 <timeline date_start="date_start"
                           date_stop="date_end"
-                          default_group_by="employees_ids"
+                          default_group_by="project_id"
                           event_open_popup="true"
-                          colors="#ec7063: state == 'cancel'; #ffed75: state == 'confirm'; #2ecb71: state == 'done';">
+                          colors="#48B3D1: type == '1';">
+<!--                          colors="#ec7063: state == 'cancel'; #ffed75: state == 'confirm'; #2ecb71: state == 'done';">-->
                     <field name="duration"/>
                     <field name="name"/>
                     <field name="notes"/>
+                    <field name="employees_ids"/>
                     <templates>
                         <t t-name="timeline-item">
                             <div class="o_project_timeline_item" t-att-title="record.notes">
