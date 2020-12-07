@@ -92,12 +92,12 @@ class work_schedule(models.Model):
                 delta = b - a
                 rec.duration = delta.days
 
-    # def get_emp_timesheet(self):
+class work_schedule_holidays(models.Model):
+    _name = 'work_schedule.holidays'
+    _description = 'Work schedule holidays'
 
+    employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
+    holidays_ids = fields.Many2one('hr.leave', string="Holiday")
+    date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
+    date_end = fields.Date(string='Date stop', select=True, copy=False)
 
-# class hr_timesheets_lines(models.Model):
-#     _name = 'hr_timesheets.lines'
-#     _description = 'HR Timesheets Lines'
-#     _inherit = ['hr_timesheet.sheet']
-#
-#     employee_id = fields.Many2one('hr_timesheet.sheet')
