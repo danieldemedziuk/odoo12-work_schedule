@@ -17,7 +17,7 @@ class work_schedule(models.Model):
     @api.depends('project_id')
     def _get_name_fnc(self):
         for rec in self:
-            rec.name = str(rec.employees_ids['x_user_id'] + ' / ' + rec.project_id['name'])
+            rec.name = str(rec.employees_ids['employee_id'] + ' / ' + rec.project_id['name'])
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
@@ -27,8 +27,8 @@ class work_schedule(models.Model):
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
     employee_id = fields.Char(compute='_get_employee_picture', readonly=True)
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
-    date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
-    date_end = fields.Date(string='Date stop', select=True, copy=False)
+    date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
+    date_end = fields.Date(string='Date stop', index=True, copy=False)
     duration = fields.Integer(compute='calc_duration', string='Duration (days)', default='0', store=True, readonly=True)
     notes = fields.Text(string='Note', help='A short note about schedule.')
     state = fields.Selection([
@@ -60,7 +60,7 @@ class work_schedule(models.Model):
                                  <img class="img img-fluid" name="image" src="/web/image/default_image.png" border="1">
                             </div>"""
 
-            rec.employee_id = rec.employees_ids['x_user_id']
+            rec.employee_id = rec.employees_ids['employee_id']
 
     def action_involvement_confirm(self):
         if self.employees_ids and self.project_id and self.date_start:
@@ -92,12 +92,9 @@ class work_schedule(models.Model):
                 delta = b - a
                 rec.duration = delta.days
 
-class work_schedule_holidays(models.Model):
-    _name = 'work_schedule.holidays'
-    _description = 'Work schedule holidays'
 
-    employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
-    holidays_ids = fields.Many2one('hr.leave', string="Holiday")
-    date_start = fields.Date(string='Date start', select=True, copy=False, required=True)
-    date_end = fields.Date(string='Date stop', select=True, copy=False)
+class work_schedule_holidays(models.Model):
+    _inherit = 'hr.leave'
+
+
 

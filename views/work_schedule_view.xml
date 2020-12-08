@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-<!--        Form View-->
-        <record id="edit_schedule" model="ir.ui.view">
-            <field name="name">work_schedule.form</field>
+<!--        Model-->
+        <!--        Form View-->
+        <record id="work_schedule_model_form" model="ir.ui.view">
+            <field name="name">work_schedule.model.form</field>
             <field name="model">work_schedule.model</field>
             <field name="arch" type="xml">
                 <form string="Schedule">
@@ -50,9 +50,9 @@
             </field>
         </record>
 
-<!--        Tree View-->
-        <record id="view_project" model="ir.ui.view">
-            <field name="name">work_schedule.tree</field>
+        <!--        Tree View-->
+        <record id="work_schedule_model_tree" model="ir.ui.view">
+            <field name="name">work_schedule.model.tree</field>
             <field name="model">work_schedule.model</field>
             <field name="arch" type="xml">
                <tree string="Involvement" decoration-info="type == '1'">
@@ -66,7 +66,7 @@
             </field>
         </record>
 
-<!--        Gantt View-->
+        <!--        Timeline View-->
         <record id="work_schedule_timeline" model="ir.ui.view">
             <field name="model">work_schedule.model</field>
             <field name="type">timeline</field>
@@ -100,17 +100,31 @@
             </field>
         </record>
 
-        <record id="work_schedule_holidays_timeline" model="ir.ui.view">
-            <field name="model">work_schedule.holidays</field>
+<!--        Holidays-->
+        <!--        Form View-->
+        <record id="work_schedule_holidays_form" model="ir.ui.view">
+            <field name="name">work_schedule.holidays.form</field>
+            <field name="model">hr.leave</field>
+            <field name="arch" type="xml">
+                <form string="Holidays">
+                </form>
+            </field>
+        </record>
+
+        <!--        Timeline View-->
+        <record id="ws_holidays_timeline" model="ir.ui.view">
+            <field name="model">hr.leave</field>
             <field name="type">timeline</field>
             <field name="arch" type="xml">
-                <timeline default_group_by="holidays_ids"
+                <timeline date_start="date_from"
+                          date_stop="date_to"
+                          default_group_by="employee_id"
                           event_open_popup="true">
-                    <field name="employees_ids"/>
+<!--                    <field name="employee_id"/>-->
                     <templates>
                         <t t-name="timeline-item">
                             <div class="o_project_timeline_item" t-att-title="record.notes">
-                                <img t-if="record.employees_ids"
+                                <img t-if="record.employee_id"
                                      t-attf-src="/web/image/hr.employee/{{ record.employees_ids[0] }}/image/24x24"
                                      t-att-title="record.employees_ids[1]" width="24" height="24" class="mr8"/>
                                 <span name="display_name" style="font-weight: bold;">
@@ -129,30 +143,19 @@
             <field name="res_model">work_schedule.model</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,timeline</field>
-            <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click to create a new schedule.
-              </p>
-            </field>
         </record>
 
         <record model='ir.actions.act_window' id='work_schedule_holidays_act'>
             <field name="name">Holidays</field>
-            <field name="res_model">work_schedule.holidays</field>
+            <field name="res_model">hr.leave</field>
             <field name="view_type">form</field>
             <field name="view_mode">timeline</field>
-            <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click to create a new schedule.
-              </p>
-            </field>
         </record>
 
 <!--        Menu -->
         <menuitem name="Schedule" id="work_schedule_master" sequence="110" web_icon="work_schedule,static/description/icon.png"/>
-        <menuitem name="Schedule" id="work_schedule_pm" parent="work_schedule_master" sequence="40"/>
-        <menuitem name="Involvement" id="work_schedule_schedule" action="work_schedule_model_act" parent="work_schedule_pm" sequence="1"/>
-        <menuitem name="Holidays" id="work_schedule_holidays" action="work_schedule_holidays_act" parent="work_schedule_pm"/>
+        <menuitem name="Schedule" id="work_schedule_model_view" action="work_schedule_model_act" parent="work_schedule_master" sequence="90"/>
+        <menuitem name="Holidays" id="work_schedule_holidays_view" action="work_schedule_holidays_act" parent="work_schedule_master" sequence="99"/>
 
     </data>
 </odoo>
