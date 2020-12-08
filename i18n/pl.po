@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 10:07+0000\n"
-"PO-Revision-Date: 2020-11-13 10:07+0000\n"
+"POT-Creation-Date: 2020-12-08 15:02+0000\n"
+"PO-Revision-Date: 2020-12-08 15:02+0000\n"
 "Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgid "Active"
 msgstr "Aktywne"
 
 #. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 msgid "Approve"
 msgstr "Aprobuj"
 
@@ -41,11 +41,6 @@ msgstr "Aprobuj"
 #: selection:work_schedule.model,state:0
 msgid "Cancel"
 msgstr "Anulowany"
-
-#. module: work_schedule
-#: model_terms:ir.actions.act_window,help:work_schedule.work_schedule_model_act
-msgid "Click to create a new schedule."
-msgstr "Kliknij, aby stworzyć nowy harmonogram."
 
 #. module: work_schedule
 #: selection:work_schedule.model,state:0
@@ -78,16 +73,16 @@ msgid "Display Name"
 msgstr "Nazwa wyświetlana"
 
 #. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 #: selection:work_schedule.model,state:0
 msgid "Done"
 msgstr "Wykonano"
 
 #. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 #: selection:work_schedule.model,state:0
 msgid "Draft"
-msgstr "Na projekt"
+msgstr "Projekt"
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__duration
@@ -101,9 +96,22 @@ msgid "Employee"
 msgstr "Pracownik"
 
 #. module: work_schedule
+#: selection:work_schedule.model,type:0
+msgid "Facility"
+msgstr "Obiekt"
+
+#. module: work_schedule
+#: model:ir.actions.act_window,name:work_schedule.work_schedule_holidays_act
+#: model:ir.ui.menu,name:work_schedule.work_schedule_holidays_view
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_holidays_form
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_holidays_tree
+msgid "Holidays"
+msgstr "Urlopy"
+
+#. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: work_schedule
 #: model:ir.model.fields,help:work_schedule.field_work_schedule_model__active
@@ -116,9 +124,8 @@ msgid "Image"
 msgstr "Obraz"
 
 #. module: work_schedule
-#: model:ir.ui.menu,name:work_schedule.work_schedule_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.view_project
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_tree
 msgid "Involvement"
 msgstr "Zaangażowanie"
 
@@ -138,6 +145,11 @@ msgid "Last Updated on"
 msgstr "Data ostatniej aktualizacji"
 
 #. module: work_schedule
+#: model:ir.model,name:work_schedule.model_hr_leave
+msgid "Leave"
+msgstr "Urlop"
+
+#. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__name
 msgid "Name"
 msgstr "Nazwa"
@@ -148,9 +160,19 @@ msgid "Note"
 msgstr "Notatka"
 
 #. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 msgid "Notes"
 msgstr "Notatki"
+
+#. module: work_schedule
+#: selection:work_schedule.model,type:0
+msgid "Office"
+msgstr "Biuro"
+
+#. module: work_schedule
+#: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__type
+msgid "Place of work"
+msgstr "Miejsce wykonywania pracy"
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__project_id
@@ -163,32 +185,27 @@ msgid "Project parent"
 msgstr "Menedżer projektu"
 
 #. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 msgid "Refuse"
 msgstr "Odmów"
 
 #. module: work_schedule
 #: model:ir.actions.act_window,name:work_schedule.work_schedule_model_act
 #: model:ir.ui.menu,name:work_schedule.work_schedule_master
-#: model:ir.ui.menu,name:work_schedule.work_schedule_pm
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
+#: model:ir.ui.menu,name:work_schedule.work_schedule_model_view
+#: model_terms:ir.ui.view,arch_db:work_schedule.work_schedule_model_form
 msgid "Schedule"
-msgstr "Harmonogram"
+msgstr "Planowanie"
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__state
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #. module: work_schedule
 #: model:res.groups,comment:work_schedule.group_work_schedule_manager
 msgid "The manager will be able to create and manage work schedule."
 msgstr "Menedżer będzie mógł tworzyć i zarządzać harmonogramem pracy."
-
-#. module: work_schedule
-#: model_terms:ir.ui.view,arch_db:work_schedule.edit_schedule
-msgid "Timesheet"
-msgstr "Karta pracy"
 
 #. module: work_schedule
 #: model:res.groups,name:work_schedule.group_work_schedule_manager
@@ -199,4 +216,9 @@ msgstr "Harmonogram pracy / Menedżer"
 #: model:ir.model,name:work_schedule.model_work_schedule_model
 msgid "Work schedule Model"
 msgstr "Harmonogram pracy Model"
+
+#. module: work_schedule
+#: model:ir.model,name:work_schedule.model_work_schedule_holidays
+msgid "Work schedule holidays"
+msgstr "Urlopy w planie pracy"
 

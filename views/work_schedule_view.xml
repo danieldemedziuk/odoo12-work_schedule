@@ -107,6 +107,7 @@
             <field name="model">hr.leave</field>
             <field name="arch" type="xml">
                 <form string="Holidays">
+
                 </form>
             </field>
         </record>
@@ -120,13 +121,13 @@
                           date_stop="date_to"
                           default_group_by="employee_id"
                           event_open_popup="true">
-<!--                    <field name="employee_id"/>-->
+                    <field name="employee_id"/>
                     <templates>
                         <t t-name="timeline-item">
                             <div class="o_project_timeline_item" t-att-title="record.notes">
                                 <img t-if="record.employee_id"
-                                     t-attf-src="/web/image/hr.employee/{{ record.employees_ids[0] }}/image/24x24"
-                                     t-att-title="record.employees_ids[1]" width="24" height="24" class="mr8"/>
+                                     t-attf-src="/web/image/hr.employee/{{ record.employee_id[0] }}/image/24x24"
+                                     t-att-title="record.employee_id[1]" width="24" height="24" class="mr8"/>
                                 <span name="display_name" style="font-weight: bold;">
                                     <t t-esc="record.display_name"/>
                                 </span>
