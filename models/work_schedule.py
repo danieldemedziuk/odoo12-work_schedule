@@ -17,7 +17,8 @@ class work_schedule(models.Model):
     @api.depends('project_id')
     def _get_name_fnc(self):
         for rec in self:
-            rec.name = str(rec.employees_ids['employee_id'] + ' / ' + rec.project_id['name'])
+            if rec.project_id:
+                rec.name = str(rec.employees_ids['employee_id'] + ' / ' + rec.project_id['name'])
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
@@ -36,7 +37,7 @@ class work_schedule(models.Model):
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
-    ], string='Status', readonly=True, default='draft')
+    ], string='State', readonly=True, default='draft')
 
     @api.depends('project_id')
     def get_project_parent(self):
@@ -99,8 +100,28 @@ class work_schedule_holidays(models.Model):
 
 class work_schedule_involvement(models.Model):
     _name = 'work_schedule.involvement'
-    _description = 'Work schedule Involvement'
+    _inherit = 'work_schedule.model'
 
-    employee_id = fields.Many2one('hr.employee', string='Employee')
-    work_schedule_ids = fields.Many2one('work_schedule.model', string="Work schedule Model")
+    status = fields.Selection([
+        ('free', 'Free'),
+        ('busy', 'Busy')
+    ], default='free')
 
+
+    # @api.one
+    # def check_status(self):
+    #     print("HERE")
+    #     for rec in self:
+    #         for schedule in rec.work_schedule_ids:
+    #
+    #             # rec.write({
+    #             #     'employee_id': rec.work_schedule_ids['employees_ids'],
+    #             #     'date_start': rec.work_schedule_ids['date_start'],
+    #             #     'date_end': rec.work_schedule_ids['date_end'],
+    #             # })
+    #
+    #         print(rec.work_schedule_ids)
+    #
+    #         rec.employee_id = rec.work_schedule_ids['employees_ids']
+    #         rec.date_start = rec.work_schedule_ids['date_start']
+    #         rec.date_end = rec.work_schedule_ids['date_end']

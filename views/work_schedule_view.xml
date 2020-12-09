@@ -60,8 +60,8 @@
                     <field name="project_id"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
-                    <field name="state"/>
                     <field name="type"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -101,19 +101,8 @@
         </record>
 
 <!--        Holidays-->
-        <!--        Form View-->
-        <record id="work_schedule_holidays_form" model="ir.ui.view">
-            <field name="name">work_schedule.holidays.form</field>
-            <field name="model">hr.leave</field>
-            <field name="arch" type="xml">
-                <form string="Holidays">
-
-                </form>
-            </field>
-        </record>
-
         <!--        Timeline View-->
-        <record id="ws_holidays_timeline" model="ir.ui.view">
+        <record id="work_schedule_holidays_timeline" model="ir.ui.view">
             <field name="model">hr.leave</field>
             <field name="type">timeline</field>
             <field name="arch" type="xml">
@@ -128,6 +117,35 @@
                                 <img t-if="record.employee_id"
                                      t-attf-src="/web/image/hr.employee/{{ record.employee_id[0] }}/image/24x24"
                                      t-att-title="record.employee_id[1]" width="24" height="24" class="mr8"/>
+                                <span name="display_name" style="font-weight: bold;">
+                                    <t t-esc="record.display_name"/>
+                                </span>
+                            </div>
+                        </t>
+                    </templates>
+                </timeline>
+            </field>
+        </record>
+
+<!--        Involvement-->
+        <!--        Timeline View-->
+        <record id="work_schedule_involvement_timeline" model="ir.ui.view">
+            <field name="model">work_schedule.involvement</field>
+            <field name="type">timeline</field>
+            <field name="arch" type="xml">
+                <timeline date_start="date_start"
+                          date_stop="date_end"
+                          default_group_by="employees_ids"
+                          event_open_popup="true"
+                          colors="#e75d5d: status == 'busy'; #94de60: status == 'free';">
+                    <field name="employees_ids"/>
+                    <field name="status"/>
+                    <templates>
+                        <t t-name="timeline-item">
+                            <div class="o_project_timeline_item" t-att-title="record.notes">
+                                <img t-if="record.employees_ids"
+                                     t-attf-src="/web/image/hr.employee/{{ record.employees_ids[0] }}/image/24x24"
+                                     t-att-title="record.employees_ids[1]" width="24" height="24" class="mr8"/>
                                 <span name="display_name" style="font-weight: bold;">
                                     <t t-esc="record.display_name"/>
                                 </span>
@@ -153,10 +171,19 @@
             <field name="view_mode">timeline</field>
         </record>
 
+        <record model='ir.actions.act_window' id='work_schedule_involvement_act'>
+            <field name="name">Involvement</field>
+            <field name="res_model">work_schedule.involvement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">timeline</field>
+        </record>
+
 <!--        Menu -->
         <menuitem name="Schedule" id="work_schedule_master" sequence="110" web_icon="work_schedule,static/description/icon.png"/>
         <menuitem name="Schedule" id="work_schedule_model_view" action="work_schedule_model_act" parent="work_schedule_master" sequence="90"/>
         <menuitem name="Holidays" id="work_schedule_holidays_view" action="work_schedule_holidays_act" parent="work_schedule_master" sequence="99"/>
+        <menuitem name="Involvement" id="work_schedule_involvement_view" action="work_schedule_involvement_act" parent="work_schedule_master" sequence="100"/>
+
 
     </data>
 </odoo>
