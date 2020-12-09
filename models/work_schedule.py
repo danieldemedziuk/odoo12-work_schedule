@@ -22,7 +22,7 @@ class work_schedule(models.Model):
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
     type = fields.Selection([('0', 'Office'), ('1', 'Facility')], string='Place of work')
-    project_id = fields.Many2one('account.analytic.account', string='Project', required=True)
+    project_id = fields.Many2one('project.project', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
     employee_id = fields.Char(compute='_get_employee_picture', readonly=True)
@@ -41,8 +41,8 @@ class work_schedule(models.Model):
     @api.depends('project_id')
     def get_project_parent(self):
         for rec in self:
-            if rec.project_id['manager_id']:
-                rec.project_parent = rec.project_id['manager_id']['name']
+            if rec.project_id['user_id']:
+                rec.project_parent = rec.project_id['user_id']['name']
 
     @api.depends('employees_ids')
     def _get_employee_picture(self):
@@ -97,4 +97,10 @@ class work_schedule_holidays(models.Model):
     _inherit = 'hr.leave'
 
 
+class work_schedule_involvement(models.Model):
+    _name = 'work_schedule.involvement'
+    _description = 'Work schedule Involvement'
+
+    employee_id = fields.Many2one('hr.employee', string='Employee')
+    work_schedule_ids = fields.Many2one('work_schedule.model', string="Work schedule Model")
 
