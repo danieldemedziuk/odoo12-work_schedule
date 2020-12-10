@@ -135,17 +135,17 @@
             <field name="arch" type="xml">
                 <timeline date_start="date_start"
                           date_stop="date_end"
-                          default_group_by="employees_ids"
+                          default_group_by="employee_id"
                           event_open_popup="true"
                           colors="#e75d5d: status == 'busy'; #94de60: status == 'free';">
-                    <field name="employees_ids"/>
+                    <field name="employee_id"/>
                     <field name="status"/>
                     <templates>
                         <t t-name="timeline-item">
                             <div class="o_project_timeline_item" t-att-title="record.notes">
-                                <img t-if="record.employees_ids"
-                                     t-attf-src="/web/image/hr.employee/{{ record.employees_ids[0] }}/image/24x24"
-                                     t-att-title="record.employees_ids[1]" width="24" height="24" class="mr8"/>
+                                <img t-if="record.employee_id"
+                                     t-attf-src="/web/image/hr.employee/{{ record.employee_id[0] }}/image/24x24"
+                                     t-att-title="record.employee_id[1]" width="24" height="24" class="mr8"/>
                                 <span name="display_name" style="font-weight: bold;">
                                     <t t-esc="record.display_name"/>
                                 </span>
@@ -161,7 +161,7 @@
             <field name="name">Schedule</field>
             <field name="res_model">work_schedule.model</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form,timeline</field>
+            <field name="view_mode">timeline,tree,form</field>
         </record>
 
         <record model='ir.actions.act_window' id='work_schedule_holidays_act'>

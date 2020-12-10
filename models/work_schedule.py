@@ -32,12 +32,40 @@ class work_schedule(models.Model):
     date_end = fields.Date(string='Date stop', index=True, copy=False)
     duration = fields.Integer(compute='calc_duration', string='Duration (days)', default='0', store=True, readonly=True)
     notes = fields.Text(string='Note', help='A short note about schedule.')
+    involvement_id = fields.Many2one('work_schedule.involvement', string='Involvement', copy=False)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirm', 'Confirm'),
         ('done', 'Done'),
         ('cancel', 'Cancel'),
     ], string='State', readonly=True, default='draft')
+
+    @api.constrains('employees_ids', 'project_id', 'date_start', 'date_end')
+    def _add_record(self):
+        for rec in self:
+            if not rec.involvement_id:
+                self.involvement_id = self.env["work_schedule.involvement"].create({
+                    'name': rec.name,
+                    'employee_id': rec.employees_ids.id,
+                    'project_id': rec.project_id.id,
+                    'date_start': rec.date_start,
+                    'date_end': rec.date_end,
+                })
+
+            elif rec.employees_ids or rec.project_id or rec.date_start or rec.date_end:
+                self.involvement_id.write({
+                    'name': rec.name,
+                    'employee_id': rec.employees_ids.id,
+                    'project_id': rec.project_id.id,
+                    'date_start': rec.date_start,
+                    'date_end': rec.date_end,
+                })
+
+    @api.multi
+    def unlink(self):
+        resources = self.mapped('involvement_id')
+        super(work_schedule, self).unlink()
+        return resources.unlink()
 
     @api.depends('project_id')
     def get_project_parent(self):
@@ -100,28 +128,44 @@ class work_schedule_holidays(models.Model):
 
 class work_schedule_involvement(models.Model):
     _name = 'work_schedule.involvement'
-    _inherit = 'work_schedule.model'
 
+    name = fields.Char(string='Name', type="char", store=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
+    date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
+    date_end = fields.Date(string='Date stop', index=True, copy=False)
+    project_id = fields.Many2one('project.project', string='Project', required=True)
     status = fields.Selection([
         ('free', 'Free'),
         ('busy', 'Busy')
-    ], default='free')
+    ], default='free', compute='check_status')
+
+    def check_status(self):
+        data_lst = {}
+        for rec in self:
+            employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])])
+            data_lst[rec['employee_id']['name']] = {}
+            for item in employees_set:
+                data_lst[item['employee_id']['name']][item['project_id']] = {}
+                data_lst[item['employee_id']['name']][item['project_id']]['date_start'] = item['date_start']
+                data_lst[item['employee_id']['name']][item['project_id']]['date_end'] = item['date_end']
+
+        if data_lst:
+            for elem in iter(data_lst.items()):
+                dict_dates = elem[1].values()
+                prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
+                for x in dict_dates:
+                    start = datetime.strptime(str(x['date_start']), "%Y-%m-%d").date()
+                    end = datetime.strptime(str(x['date_end']), "%Y-%m-%d").date()
+                    print(start, end)
+
+                    if (start < prev_val) and prev_val != '2000-01-01':
+                        print('Busy')
+                        self.env["work_schedule.involvement"].write({'status': 'busy'})
+
+                    elif start > prev_val:
+                        print('Free')
+                        self.env["work_schedule.involvement"].write({'status': 'free'})
+                    prev_val = end
 
 
-    # @api.one
-    # def check_status(self):
-    #     print("HERE")
-    #     for rec in self:
-    #         for schedule in rec.work_schedule_ids:
-    #
-    #             # rec.write({
-    #             #     'employee_id': rec.work_schedule_ids['employees_ids'],
-    #             #     'date_start': rec.work_schedule_ids['date_start'],
-    #             #     'date_end': rec.work_schedule_ids['date_end'],
-    #             # })
-    #
-    #         print(rec.work_schedule_ids)
-    #
-    #         rec.employee_id = rec.work_schedule_ids['employees_ids']
-    #         rec.date_start = rec.work_schedule_ids['date_start']
-    #         rec.date_end = rec.work_schedule_ids['date_end']
+
