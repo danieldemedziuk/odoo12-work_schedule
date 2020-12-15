@@ -128,6 +128,21 @@
         </record>
 
 <!--        Involvement-->
+        <!--        Form View-->
+        <record id="work_schedule_involvement_form" model="ir.ui.view">
+            <field name="name">work_schedule.involvementl.form</field>
+            <field name="model">work_schedule.involvement</field>
+            <field name="arch" type="xml">
+                <form string="Involvement">
+                    <field name="employee_id"/>
+                    <field name="project_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="status"/>
+                </form>
+            </field>
+        </record>
+
         <!--        Timeline View-->
         <record id="work_schedule_involvement_timeline" model="ir.ui.view">
             <field name="model">work_schedule.involvement</field>

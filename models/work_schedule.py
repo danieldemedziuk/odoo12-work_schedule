@@ -137,10 +137,13 @@ class work_schedule_involvement(models.Model):
     status = fields.Selection([
         ('free', 'Free'),
         ('busy', 'Busy')
-    ], default='free', compute='check_status')
+    ], compute='check_status')
 
+    @api.one
     def check_status(self):
+        self.ensure_one()
         data_lst = {}
+
         for rec in self:
             employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])])
             data_lst[rec['employee_id']['name']] = {}
@@ -156,16 +159,10 @@ class work_schedule_involvement(models.Model):
                 for x in dict_dates:
                     start = datetime.strptime(str(x['date_start']), "%Y-%m-%d").date()
                     end = datetime.strptime(str(x['date_end']), "%Y-%m-%d").date()
-                    print(start, end)
 
                     if (start < prev_val) and prev_val != '2000-01-01':
-                        print('Busy')
-                        self.env["work_schedule.involvement"].write({'status': 'busy'})
+                        self.status = 'busy'
 
                     elif start > prev_val:
-                        print('Free')
-                        self.env["work_schedule.involvement"].write({'status': 'free'})
+                        self.status = 'free'
                     prev_val = end
-
-
-
