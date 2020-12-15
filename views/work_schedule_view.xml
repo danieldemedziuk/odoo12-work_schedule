@@ -152,7 +152,7 @@
                           date_stop="date_end"
                           default_group_by="employee_id"
                           event_open_popup="true"
-                          colors="#e75d5d: status == 'busy'; #94de60: status == 'free';">
+                          colors="#ffc3c7: status == 'busy'; #b8eab5: status == 'free';">
                     <field name="employee_id"/>
                     <field name="status"/>
                     <templates>
