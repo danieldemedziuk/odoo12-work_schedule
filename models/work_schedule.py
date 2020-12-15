@@ -151,25 +151,25 @@ class work_schedule_involvement(models.Model):
                 data_lst[item['employee_id']['name']][item['project_id']]['date_start'] = item['date_start']
                 data_lst[item['employee_id']['name']][item['project_id']]['date_end'] = item['date_end']
 
-            if data_lst:
-                for elem in iter(data_lst.items()):
-                    dict_dates = elem[1].values()
-                    prev_name = ''
-                    prev_val = datetime
+        if data_lst:
+            for elem in data_lst.items():
+                dict_dates = elem[1].values()
+                prev_name = ''
+                prev_val = datetime
 
-                    for dates in dict_dates:
-                        if prev_name != elem[0] or prev_name == '':
-                            prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
+                for dates in dict_dates:
+                    if prev_name != elem[0] or prev_name == '':
+                        prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
 
-                        start = datetime.strptime(str(dates['date_start']), "%Y-%m-%d").date()
-                        end = datetime.strptime(str(dates['date_end']), "%Y-%m-%d").date()
+                    start = datetime.strptime(str(dates['date_start']), "%Y-%m-%d").date()
+                    end = datetime.strptime(str(dates['date_end']), "%Y-%m-%d").date()
 
-                        if (start <= prev_val) and (prev_val != '2000-01-01'):
-                            rec.write({'status': 'busy'})
-                            rec.status = 'busy'
+                    if (start <= prev_val) and (prev_val != '2000-01-01'):
+                        self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
+                        self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]).status = 'busy'
+                    elif start > prev_val:
+                        self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'free'
 
-                        elif start > prev_val:
-                            rec.write({'status': 'free'})
-                            rec.status = 'free'
-                        prev_val = end
-                        prev_name = elem[0]
+                    prev_val = end
+                    prev_name = elem[0]
+
