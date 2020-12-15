@@ -22,7 +22,7 @@ class work_schedule(models.Model):
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
-    type = fields.Selection([('0', 'Office'), ('1', 'Facility')], string='Place of work')
+    type = fields.Selection([(0, 'Office'), (1, 'Facility')], default=0, string='Place of work')
     project_id = fields.Many2one('project.project', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
@@ -137,32 +137,39 @@ class work_schedule_involvement(models.Model):
     status = fields.Selection([
         ('free', 'Free'),
         ('busy', 'Busy')
-    ], compute='check_status')
+    ], default='free', compute='check_status')
 
     @api.one
     def check_status(self):
-        self.ensure_one()
         data_lst = {}
 
         for rec in self:
-            employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])])
+            employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])], order="date_start asc")
             data_lst[rec['employee_id']['name']] = {}
             for item in employees_set:
                 data_lst[item['employee_id']['name']][item['project_id']] = {}
                 data_lst[item['employee_id']['name']][item['project_id']]['date_start'] = item['date_start']
                 data_lst[item['employee_id']['name']][item['project_id']]['date_end'] = item['date_end']
 
-        if data_lst:
-            for elem in iter(data_lst.items()):
-                dict_dates = elem[1].values()
-                prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
-                for x in dict_dates:
-                    start = datetime.strptime(str(x['date_start']), "%Y-%m-%d").date()
-                    end = datetime.strptime(str(x['date_end']), "%Y-%m-%d").date()
+            if data_lst:
+                for elem in iter(data_lst.items()):
+                    dict_dates = elem[1].values()
+                    prev_name = ''
+                    prev_val = datetime
 
-                    if (start < prev_val) and prev_val != '2000-01-01':
-                        self.status = 'busy'
+                    for dates in dict_dates:
+                        if prev_name != elem[0] or prev_name == '':
+                            prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
 
-                    elif start > prev_val:
-                        self.status = 'free'
-                    prev_val = end
+                        start = datetime.strptime(str(dates['date_start']), "%Y-%m-%d").date()
+                        end = datetime.strptime(str(dates['date_end']), "%Y-%m-%d").date()
+
+                        if (start <= prev_val) and (prev_val != '2000-01-01'):
+                            rec.write({'status': 'busy'})
+                            rec.status = 'busy'
+
+                        elif start > prev_val:
+                            rec.write({'status': 'free'})
+                            rec.status = 'free'
+                        prev_val = end
+                        prev_name = elem[0]
