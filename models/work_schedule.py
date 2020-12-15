@@ -46,6 +46,7 @@ class work_schedule(models.Model):
             if not rec.involvement_id:
                 self.involvement_id = self.env["work_schedule.involvement"].create({
                     'name': rec.name,
+                    'schedule_ids': rec.id,
                     'employee_id': rec.employees_ids.id,
                     'project_id': rec.project_id.id,
                     'date_start': rec.date_start,
@@ -55,6 +56,7 @@ class work_schedule(models.Model):
             elif rec.employees_ids or rec.project_id or rec.date_start or rec.date_end:
                 self.involvement_id.write({
                     'name': rec.name,
+                    'schedule_ids': rec.id,
                     'employee_id': rec.employees_ids.id,
                     'project_id': rec.project_id.id,
                     'date_start': rec.date_start,
@@ -134,6 +136,7 @@ class work_schedule_involvement(models.Model):
     date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', index=True, copy=False)
     project_id = fields.Many2one('project.project', string='Project', required=True)
+    schedule_ids = fields.Many2one('work_schedule.model', string='Schedule model')
     status = fields.Selection([
         ('free', 'Free'),
         ('busy', 'Busy')
@@ -142,7 +145,6 @@ class work_schedule_involvement(models.Model):
     @api.one
     def check_status(self):
         data_lst = {}
-
         for rec in self:
             employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])], order="date_start asc")
             data_lst[rec['employee_id']['name']] = {}
@@ -165,11 +167,34 @@ class work_schedule_involvement(models.Model):
                     end = datetime.strptime(str(dates['date_end']), "%Y-%m-%d").date()
 
                     if (start <= prev_val) and (prev_val != '2000-01-01'):
-                        self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
-                        self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]).status = 'busy'
+
+                        if len(self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)])) == 1:
+                            self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
+                        else:
+                            for item in self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]):
+                                item.status = 'free'
+
+                        if len(self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)])) == 1:
+                            self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]).status = 'busy'
+                        else:
+                            for item in self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]):
+                                item.status = 'busy'
+
                     elif start > prev_val:
                         self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'free'
 
                     prev_val = end
                     prev_name = elem[0]
+
+    # @api.onchange('date_start', 'date_end')
+    # def add_involvement(self):
+    #     for rec in self:
+    #         print("SCHED", rec.schedule_ids['project_id'])
+    #         if rec.schedule_ids:
+    #             self.schedule_ids.write({
+    #                 'employees_ids': rec.employee_id.id,
+    #                 'project_id': rec.project_id.id,
+    #                 'date_start': rec.date_start,
+    #                 'date_end': rec.date_end,
+    #             })
 
