@@ -143,7 +143,7 @@
                             <field name="date_start"/>
                             <field name="date_end"/>
                             <field name="status"/>
-                            <field name="schedule_ids"/>
+                            <field name="schedule_ids" invisible="1"/>
                         </group>
                     </sheet>
                 </form>
