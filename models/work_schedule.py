@@ -130,6 +130,7 @@ class work_schedule_holidays(models.Model):
 
 class work_schedule_involvement(models.Model):
     _name = 'work_schedule.involvement'
+    _description = 'Work schedule Involvement'
 
     name = fields.Char(string='Name', type="char", store=True)
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
@@ -172,7 +173,7 @@ class work_schedule_involvement(models.Model):
                             self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
                         else:
                             for item in self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]):
-                                item.status = 'free'
+                                item.status = 'busy'
 
                         if len(self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)])) == 1:
                             self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]).status = 'busy'
@@ -185,16 +186,3 @@ class work_schedule_involvement(models.Model):
 
                     prev_val = end
                     prev_name = elem[0]
-
-    # @api.onchange('date_start', 'date_end')
-    # def add_involvement(self):
-    #     for rec in self:
-    #         print("SCHED", rec.schedule_ids['project_id'])
-    #         if rec.schedule_ids:
-    #             self.schedule_ids.write({
-    #                 'employees_ids': rec.employee_id.id,
-    #                 'project_id': rec.project_id.id,
-    #                 'date_start': rec.date_start,
-    #                 'date_end': rec.date_end,
-    #             })
-
