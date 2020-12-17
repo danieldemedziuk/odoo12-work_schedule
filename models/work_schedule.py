@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
 from datetime import datetime
 import logging
 
@@ -93,25 +92,37 @@ class work_schedule(models.Model):
 
             rec.employee_id = rec.employees_ids['employee_id']
 
-    def action_involvement_confirm(self):
-        if self.employees_ids and self.project_id and self.date_start:
-            self.ensure_one()
-            self.write({'state': 'confirm'})
+    @api.constrains('active')
+    def _archive_project(self):
+        for rec in self:
+            if not rec.active:
+                self.involvement_id.write({
+                    'active': False,
+                })
+            if rec.active:
+                self.involvement_id.write({
+                    'active': True,
+                })
 
-    def action_involvement_done(self):
-        if self.employees_ids and self.project_id and self.date_start:
-            self.ensure_one()
-            self.write({'state': 'done'})
-
-    def action_involvement_draft(self):
-        if self.employees_ids and self.project_id and self.date_start:
-            self.ensure_one()
-            self.write({'state': 'draft'})
-
-    def action_involvement_refuse(self):
-        if self.employees_ids and self.project_id and self.date_start:
-            self.ensure_one()
-            self.write({'state': 'cancel'})
+    # def action_involvement_confirm(self):
+    #     if self.employees_ids and self.project_id and self.date_start:
+    #         self.ensure_one()
+    #         self.write({'state': 'confirm'})
+    #
+    # def action_involvement_done(self):
+    #     if self.employees_ids and self.project_id and self.date_start:
+    #         self.ensure_one()
+    #         self.write({'state': 'done'})
+    #
+    # def action_involvement_draft(self):
+    #     if self.employees_ids and self.project_id and self.date_start:
+    #         self.ensure_one()
+    #         self.write({'state': 'draft'})
+    #
+    # def action_involvement_refuse(self):
+    #     if self.employees_ids and self.project_id and self.date_start:
+    #         self.ensure_one()
+    #         self.write({'state': 'cancel'})
 
     @api.depends('date_start', 'date_end')
     def calc_duration(self):
@@ -133,6 +144,7 @@ class work_schedule_involvement(models.Model):
     _description = 'Work schedule Involvement'
 
     name = fields.Char(string='Name', type="char", store=True)
+    active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
     date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', index=True, copy=False)
