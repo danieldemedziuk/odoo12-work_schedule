@@ -4,6 +4,7 @@
 from odoo import api, fields, models, _
 from datetime import datetime
 import logging
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -32,6 +33,8 @@ class work_schedule(models.Model):
     duration = fields.Integer(compute='calc_duration', string='Duration (days)', default='0', store=True, readonly=True)
     notes = fields.Text(string='Note', help='A short note about schedule.')
     involvement_id = fields.Many2one('work_schedule.involvement', string='Involvement', copy=False)
+    department = fields.Char(compute='_get_employee_picture', string="Department", readonly=True, store=True)
+    holiday = fields.Many2one('hr.leave', string="Holiday")
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirm', 'Confirm'),
@@ -77,6 +80,8 @@ class work_schedule(models.Model):
     @api.depends('employees_ids')
     def _get_employee_picture(self):
         for rec in self:
+            if rec.employees_ids['department_id']:
+                rec.department = rec.employees_ids['department_id']['name']
             if rec.employees_ids['image']:
                 rec.image = """
                             <div aria-atomic="true" class="o_field_image o_field_widget oe_avatar" name="image" data-original-title="" title="">
@@ -104,26 +109,6 @@ class work_schedule(models.Model):
                     'active': True,
                 })
 
-    # def action_involvement_confirm(self):
-    #     if self.employees_ids and self.project_id and self.date_start:
-    #         self.ensure_one()
-    #         self.write({'state': 'confirm'})
-    #
-    # def action_involvement_done(self):
-    #     if self.employees_ids and self.project_id and self.date_start:
-    #         self.ensure_one()
-    #         self.write({'state': 'done'})
-    #
-    # def action_involvement_draft(self):
-    #     if self.employees_ids and self.project_id and self.date_start:
-    #         self.ensure_one()
-    #         self.write({'state': 'draft'})
-    #
-    # def action_involvement_refuse(self):
-    #     if self.employees_ids and self.project_id and self.date_start:
-    #         self.ensure_one()
-    #         self.write({'state': 'cancel'})
-
     @api.depends('date_start', 'date_end')
     def calc_duration(self):
         for rec in self:
@@ -134,9 +119,41 @@ class work_schedule(models.Model):
                 delta = b - a
                 rec.duration = delta.days
 
+    @api.constrains('date_start', 'date_end')
+    def _check_availability(self):
+        for rec in self:
+            holiday_ids = rec.holiday.search([('employee_id', '=', rec.employees_ids.id)])
+
+            for req in holiday_ids:
+                if rec.date_end >= req['request_date_from'] and rec.date_start <= req['request_date_to'] and req['state'] == 'validate':
+                    raise UserError(_("Warning! The employee is on leave at this time. Verify the employee's leave and select other dates."))
+
 
 class work_schedule_holidays(models.Model):
     _inherit = 'hr.leave'
+
+    work_schedule_id = fields.Many2one('work_schedule.model', string="Work Schedule")
+
+    @api.multi
+    def action_approve(self):
+        for rec in self:
+            work_ids = rec.work_schedule_id.search([('employees_ids', '=', rec.employee_id.id)])
+
+            for req in work_ids:
+                if rec.request_date_from <= req['date_end'] and rec.request_date_to >= req['date_start']:
+                    raise UserError(_("Warning! An employee on that day is assigned to a project on the schedule. Revise this employee's schedule or change the vacation date."))
+
+        # if validation_type == 'both': this method is the first approval approval
+        # if validation_type != 'both': this method calls action_validate() below
+        if any(holiday.state != 'confirm' for holiday in self):
+            raise UserError(_('Leave request must be confirmed ("To Approve") in order to approve it.'))
+
+        current_employee = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
+        self.filtered(lambda hol: hol.validation_type == 'both').write({'state': 'validate1', 'first_approver_id': current_employee.id})
+        self.filtered(lambda hol: not hol.validation_type == 'both').action_validate()
+        if not self.env.context.get('leave_fast_create'):
+            self.activity_update()
+        return True
 
 
 class work_schedule_involvement(models.Model):

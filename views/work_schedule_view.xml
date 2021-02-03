@@ -36,6 +36,7 @@
                         <group>
                             <field name="project_id" options="{'no_create': True, 'no_create_edit':True}"/>
                             <field name="project_parent"/>
+                            <field name="department"/>
                             <field name="date_start"/>
                             <field name="date_end"/>
                             <field name="duration"/>
@@ -81,6 +82,7 @@
                     <field name="name"/>
                     <field name="notes"/>
                     <field name="employees_ids"/>
+                    <field name="department"/>
                     <templates>
                         <t t-name="timeline-item">
                             <div class="o_project_timeline_item" t-att-title="record.notes">
@@ -109,7 +111,8 @@
                 <timeline date_start="date_from"
                           date_stop="date_to"
                           default_group_by="employee_id"
-                          event_open_popup="true">
+                          event_open_popup="true"
+                          colors="#2ecb71: state == 'validate';">
                     <field name="employee_id"/>
                     <templates>
                         <t t-name="timeline-item">
