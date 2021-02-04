@@ -144,7 +144,7 @@ class work_schedule_holidays(models.Model):
                 if rec.request_date_from <= req['date_end'] and rec.request_date_to >= req['date_start']:
                     raise UserError(_("""This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code.
 
-                    Error code: Vacation consolidation with work schedule."""))
+                    Error code: Collision of leave with work schedule."""))
 
         # if validation_type == 'both': this method is the first approval approval
         # if validation_type != 'both': this method calls action_validate() below
