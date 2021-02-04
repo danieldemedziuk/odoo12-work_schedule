@@ -4,7 +4,7 @@
 from odoo import api, fields, models, _
 from datetime import datetime
 import logging
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class work_schedule(models.Model):
     project_id = fields.Many2one('project.project', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
     employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
-    employee_id = fields.Char(compute='_get_employee_picture', readonly=True)
+    employee_id = fields.Char(compute='_get_employee_picture', string="Name", readonly=True)
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
     date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
     date_end = fields.Date(string='Date stop', index=True, copy=False)
@@ -119,6 +119,7 @@ class work_schedule(models.Model):
                 delta = b - a
                 rec.duration = delta.days
 
+    @api.one
     @api.constrains('date_start', 'date_end')
     def _check_availability(self):
         for rec in self:
@@ -126,7 +127,7 @@ class work_schedule(models.Model):
 
             for req in holiday_ids:
                 if rec.date_end >= req['request_date_from'] and rec.date_start <= req['request_date_to'] and req['state'] == 'validate':
-                    raise UserError(_("Warning! The employee is on leave at this time. Verify the employee's leave and select other dates."))
+                    raise ValidationError(_("Warning! The employee is on leave at this time. Verify the employee's leave and select other dates."))
 
 
 class work_schedule_holidays(models.Model):
@@ -141,7 +142,9 @@ class work_schedule_holidays(models.Model):
 
             for req in work_ids:
                 if rec.request_date_from <= req['date_end'] and rec.request_date_to >= req['date_start']:
-                    raise UserError(_("Warning! An employee on that day is assigned to a project on the schedule. Revise this employee's schedule or change the vacation date."))
+                    raise UserError(_("""This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code.
+
+                    Error code: Vacation consolidation with work schedule."""))
 
         # if validation_type == 'both': this method is the first approval approval
         # if validation_type != 'both': this method calls action_validate() below
