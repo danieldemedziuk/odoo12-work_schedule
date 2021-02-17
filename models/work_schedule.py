@@ -129,6 +129,20 @@ class work_schedule(models.Model):
                 if rec.date_end >= req['request_date_from'] and rec.date_start <= req['request_date_to'] and req['state'] == 'validate':
                     raise ValidationError(_("Warning! The employee is on leave at this time. Verify the employee's leave and select other dates."))
 
+    @api.multi
+    def set_default_fnc(self):
+        for proj_id in self.env['project.project'].search([]):
+            if not self.env['work_schedule.model'].search([('project_id', '=', proj_id.id)]):
+                vals = {
+                    'project_id': proj_id.id,
+                    'employees_ids': 870,
+                    'date_start': '2020-12-31',
+                }
+
+                self.env['work_schedule.model'].create([vals])
+            else:
+                raise ValidationError(_('The project list is up to date.'))
+
 
 class work_schedule_holidays(models.Model):
     _inherit = 'hr.leave'

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <record id="category_python_action" model="ir.actions.server">
+            <field name="name">Category Accessories</field>
+            <field name="model_id" ref="work_schedule.model_work_schedule_model"/>
+            <field name="state">code</field>
+            <field name="code">action = model.set_default_fnc()</field>
+        </record>
+
+
+        <menuitem id="category_python_action_menu"  name="Accessories"  parent="work_schedule_master" action="category_python_action" sequence="120"/>
+
+    </data>
+</odoo>

@@ -8,13 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2021-02-05 09:40+0000\n"
 "PO-Revision-Date: 2021-02-05 09:40+0000\n"
-=======
 "POT-Creation-Date: 2021-02-04 14:39+0000\n"
 "PO-Revision-Date: 2021-02-04 14:39+0000\n"
->>>>>>> 3caf2ac90a716ed213e1bb162ea20e3f27d2d36f
 "Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -180,17 +177,14 @@ msgid "Leave"
 msgstr "Urlop"
 
 #. module: work_schedule
-<<<<<<< HEAD
 #: code:addons/work_schedule/models/work_schedule.py:150
 #, python-format
 msgid "Leave request must be confirmed (\"To Approve\") in order to approve it."
 msgstr ""
-=======
 #: code:addons/work_schedule/models/work_schedule.py:152
 #, python-format
 msgid "Leave request must be confirmed (\"To Approve\") in order to approve it."
 msgstr "Aby wniosek o urlop został zatwierdzony, musi zostać potwierdzony."
->>>>>>> 3caf2ac90a716ed213e1bb162ea20e3f27d2d36f
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_involvement__name
@@ -262,21 +256,18 @@ msgstr "Menedżer będzie mógł tworzyć i zarządzać harmonogramem pracy."
 #. module: work_schedule
 #: code:addons/work_schedule/models/work_schedule.py:145
 #, python-format
-<<<<<<< HEAD
 msgid "This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code. \n"
 "\n"
 "Error code: Collision of leave with work schedule."
 msgstr "Ten pracownik jest przypisany do projektu w tych dniach w harmonogramie. Skontaktuj się ze swoim kierownikiem lub administratorem podając kod błędu. \n"
 "\n"
 "Kod błędu: Kolizja urlopu z harmonogramem pracy."
-=======
 msgid "This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code.\n"
 "\n"
 "                    Error code: Collision of leave with work schedule."
 msgstr "Ten pracownik jest przypisany do projektu w tych dniach w harmonogramie. Skontaktuj się ze swoim kierownikiem lub administratorem podając kod błędu.\n"
 "\n"
 "                    Kod błędu: Kolizja urlopu z harmonogramem pracy."
->>>>>>> 3caf2ac90a716ed213e1bb162ea20e3f27d2d36f
 
 #. module: work_schedule
 #: code:addons/work_schedule/models/work_schedule.py:130

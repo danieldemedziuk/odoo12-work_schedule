@@ -209,12 +209,12 @@
             <field name="view_mode">timeline</field>
         </record>
 
+
 <!--        Menu -->
         <menuitem name="Schedule" id="work_schedule_master" sequence="110" web_icon="work_schedule,static/description/icon.png"/>
         <menuitem name="Schedule" id="work_schedule_model_view" action="work_schedule_model_act" parent="work_schedule_master" sequence="90"/>
         <menuitem name="Holidays" id="work_schedule_holidays_view" action="work_schedule_holidays_act" parent="work_schedule_master" sequence="99"/>
         <menuitem name="Involvement" id="work_schedule_involvement_view" action="work_schedule_involvement_act" parent="work_schedule_master" sequence="100"/>
-
 
     </data>
 </odoo>

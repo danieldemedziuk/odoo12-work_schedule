@@ -21,6 +21,7 @@ email: daniel.demedziuk@gmail.com
     'depends': ['project', 'base', 'mail', 'hr', 'web_timeline'],
     'data': [
         'views/work_schedule_view.xml',
+        'views/server_action.xml',
         'security/work_schedule_security.xml',
         'security/ir.model.access.csv',
         ],
