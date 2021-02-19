@@ -11,7 +11,7 @@
         </record>
 
 
-        <menuitem id="category_python_action_menu"  name="Accessories"  parent="work_schedule_master" action="category_python_action" sequence="120"/>
+        <menuitem id="category_python_action_menu"  name="Update project list"  parent="work_schedule_master" action="category_python_action" sequence="120"/>
 
     </data>
 </odoo>

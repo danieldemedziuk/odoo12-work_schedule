@@ -25,7 +25,7 @@ class work_schedule(models.Model):
     type = fields.Selection([(0, 'Office'), (1, 'Facility')], default=0, string='Place of work')
     project_id = fields.Many2one('project.project', string='Project', required=True)
     project_parent = fields.Char(compute='get_project_parent', type="char", string='Project parent', readonly=True, store=True)
-    employees_ids = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string="Employee", required=True)
+    employees_ids = fields.Many2one('hr.employee', string="Employee", required=True)
     employee_id = fields.Char(compute='_get_employee_picture', string="Name", readonly=True)
     image = fields.Html(compute="_get_employee_picture", string="Image", readonly=True)
     date_start = fields.Date(string='Date start', index=True, copy=False, required=True)
@@ -35,12 +35,14 @@ class work_schedule(models.Model):
     involvement_id = fields.Many2one('work_schedule.involvement', string='Involvement', copy=False)
     department = fields.Char(compute='_get_employee_picture', string="Department", readonly=True, store=True)
     holiday = fields.Many2one('hr.leave', string="Holiday")
-    state = fields.Selection([
-        ('draft', 'Draft'),
-        ('confirm', 'Confirm'),
-        ('done', 'Done'),
-        ('cancel', 'Cancel'),
-    ], string='State', readonly=True, default='draft')
+    state = fields.Selection([('temp', 'Temporary'), ('regular', 'Regular')], default='regular', string='State', readonly=True)
+
+    # state = fields.Selection([
+    #     ('draft', 'Draft'),
+    #     ('confirm', 'Confirm'),
+    #     ('done', 'Done'),
+    #     ('cancel', 'Cancel'),
+    # ], string='State', readonly=True, default='draft')
 
     @api.constrains('employees_ids', 'project_id', 'date_start', 'date_end')
     def _add_record(self):
@@ -131,17 +133,26 @@ class work_schedule(models.Model):
 
     @api.multi
     def set_default_fnc(self):
-        for proj_id in self.env['project.project'].search([]):
+        for proj_id in self.env['project.project'].search([('active', '=', True)]):
             if not self.env['work_schedule.model'].search([('project_id', '=', proj_id.id)]):
                 vals = {
                     'project_id': proj_id.id,
-                    'employees_ids': 870,
+                    'employees_ids': 1,
                     'date_start': '2020-12-31',
+                    'date_end': '2021-01-01',
+                    'notes': 'DEFAULT PROJECT',
+                    'state': 'temp',
                 }
 
                 self.env['work_schedule.model'].create([vals])
-            else:
-                raise ValidationError(_('The project list is up to date.'))
+
+        return {
+            'name': 'Work schedule',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'timeline,tree,form',
+            'res_model': 'work_schedule.model',
+        }
 
 
 class work_schedule_holidays(models.Model):
@@ -187,8 +198,9 @@ class work_schedule_involvement(models.Model):
         ('busy', 'Busy')
     ], default='free', compute='check_status')
 
-    @api.one
+    @api.multi
     def check_status(self):
+        # self.ensure_one()
         data_lst = {}
         for rec in self:
             employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])], order="date_start asc")
@@ -199,19 +211,31 @@ class work_schedule_involvement(models.Model):
                 data_lst[item['employee_id']['name']][item['project_id']]['date_end'] = item['date_end']
 
         if data_lst:
+            prev_name = ''
             for elem in data_lst.items():
                 dict_dates = elem[1].values()
-                prev_name = ''
                 prev_val = datetime
 
-                for dates in dict_dates:
+                for proj in elem[1].keys():
+                    # for dates in dict_dates:
+                    curr_involv = self.search([('employee_id', '=', elem[0]), ('project_id', '=', proj.id)])
+
                     if prev_name != elem[0] or prev_name == '':
                         prev_val = datetime.strptime('2000-01-01', "%Y-%m-%d").date()
 
-                    start = datetime.strptime(str(dates['date_start']), "%Y-%m-%d").date()
-                    end = datetime.strptime(str(dates['date_end']), "%Y-%m-%d").date()
+                    start = datetime.strptime(str(curr_involv['date_start']), "%Y-%m-%d").date()
+
+                    if curr_involv['date_end']:
+                        end = datetime.strptime(str(curr_involv['date_end']), "%Y-%m-%d").date()
+                    else:
+                        end = datetime.strptime(str(curr_involv['date_start']), "%Y-%m-%d").date()
 
                     if (start <= prev_val) and (prev_val != '2000-01-01'):
+                        # if self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]):
+                        #     curr_involv.status = 'busy'
+
+                        # if self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]):
+                        #     curr_involv.status = 'busy'
 
                         if len(self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)])) == 1:
                             self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
@@ -226,7 +250,7 @@ class work_schedule_involvement(models.Model):
                                 item.status = 'busy'
 
                     elif start > prev_val:
-                        self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'free'
+                        curr_involv.status = 'free'
 
                     prev_val = end
                     prev_name = elem[0]
