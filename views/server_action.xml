@@ -3,15 +3,15 @@
     <data>
 
 
-        <record id="category_python_action" model="ir.actions.server">
-            <field name="name">Category Accessories</field>
+        <record id="update_list_action" model="ir.actions.server">
+            <field name="name">Update project list</field>
             <field name="model_id" ref="work_schedule.model_work_schedule_model"/>
             <field name="state">code</field>
             <field name="code">action = model.set_default_fnc()</field>
         </record>
 
 
-        <menuitem id="category_python_action_menu"  name="Update project list"  parent="work_schedule_master" action="category_python_action" sequence="120"/>
+        <menuitem id="update_list_action_menu"  name="Update project list"  parent="work_schedule_master" action="update_list_action" sequence="120"/>
 
     </data>
 </odoo>

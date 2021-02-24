@@ -3,16 +3,14 @@
 #	* work_schedule
 #
 # Translators:
-# DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020
+# DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-05 09:40+0000\n"
-"PO-Revision-Date: 2021-02-05 09:40+0000\n"
-"POT-Creation-Date: 2021-02-04 14:39+0000\n"
-"PO-Revision-Date: 2021-02-04 14:39+0000\n"
-"Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
+"POT-Creation-Date: 2021-02-24 09:55+0000\n"
+"PO-Revision-Date: 2021-02-24 09:55+0000\n"
+"Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2021\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,16 +37,6 @@ msgstr "Aktywne"
 #: selection:work_schedule.involvement,status:0
 msgid "Busy"
 msgstr "Zajęty"
-
-#. module: work_schedule
-#: selection:work_schedule.model,state:0
-msgid "Cancel"
-msgstr "Anulowany"
-
-#. module: work_schedule
-#: selection:work_schedule.model,state:0
-msgid "Confirm"
-msgstr "Zatwierdzony"
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_involvement__create_uid
@@ -84,16 +72,6 @@ msgstr "Dział"
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__display_name
 msgid "Display Name"
 msgstr "Nazwa wyświetlana"
-
-#. module: work_schedule
-#: selection:work_schedule.model,state:0
-msgid "Done"
-msgstr "Wykonano"
-
-#. module: work_schedule
-#: selection:work_schedule.model,state:0
-msgid "Draft"
-msgstr "Projekt"
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_model__duration
@@ -177,14 +155,10 @@ msgid "Leave"
 msgstr "Urlop"
 
 #. module: work_schedule
-#: code:addons/work_schedule/models/work_schedule.py:150
+#: code:addons/work_schedule/models/work_schedule.py:175
 #, python-format
 msgid "Leave request must be confirmed (\"To Approve\") in order to approve it."
 msgstr ""
-#: code:addons/work_schedule/models/work_schedule.py:152
-#, python-format
-msgid "Leave request must be confirmed (\"To Approve\") in order to approve it."
-msgstr "Aby wniosek o urlop został zatwierdzony, musi zostać potwierdzony."
 
 #. module: work_schedule
 #: model:ir.model.fields,field_description:work_schedule.field_work_schedule_involvement__name
@@ -225,6 +199,11 @@ msgid "Project parent"
 msgstr "Menedżer projektu"
 
 #. module: work_schedule
+#: selection:work_schedule.model,state:0
+msgid "Regular"
+msgstr "Regularny"
+
+#. module: work_schedule
 #: model:ir.actions.act_window,name:work_schedule.work_schedule_model_act
 #: model:ir.ui.menu,name:work_schedule.work_schedule_master
 #: model:ir.ui.menu,name:work_schedule.work_schedule_model_view
@@ -249,12 +228,17 @@ msgid "Status"
 msgstr ""
 
 #. module: work_schedule
+#: selection:work_schedule.model,state:0
+msgid "Temporary"
+msgstr "Tymczasowy"
+
+#. module: work_schedule
 #: model:res.groups,comment:work_schedule.group_work_schedule_manager
 msgid "The manager will be able to create and manage work schedule."
 msgstr "Menedżer będzie mógł tworzyć i zarządzać harmonogramem pracy."
 
 #. module: work_schedule
-#: code:addons/work_schedule/models/work_schedule.py:145
+#: code:addons/work_schedule/models/work_schedule.py:170
 #, python-format
 msgid "This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code. \n"
 "\n"
@@ -262,15 +246,15 @@ msgid "This employee is assigned to a project on these days in the schedule. Con
 msgstr "Ten pracownik jest przypisany do projektu w tych dniach w harmonogramie. Skontaktuj się ze swoim kierownikiem lub administratorem podając kod błędu. \n"
 "\n"
 "Kod błędu: Kolizja urlopu z harmonogramem pracy."
-msgid "This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code.\n"
-"\n"
-"                    Error code: Collision of leave with work schedule."
-msgstr "Ten pracownik jest przypisany do projektu w tych dniach w harmonogramie. Skontaktuj się ze swoim kierownikiem lub administratorem podając kod błędu.\n"
-"\n"
-"                    Kod błędu: Kolizja urlopu z harmonogramem pracy."
 
 #. module: work_schedule
-#: code:addons/work_schedule/models/work_schedule.py:130
+#: model:ir.actions.server,name:work_schedule.update_list_action
+#: model:ir.ui.menu,name:work_schedule.update_list_action_menu
+msgid "Update project list"
+msgstr "Aktualizuj listę projektów"
+
+#. module: work_schedule
+#: code:addons/work_schedule/models/work_schedule.py:132
 #, python-format
 msgid "Warning! The employee is on leave at this time. Verify the employee's leave and select other dates."
 msgstr "Uwaga! Pracownik przebywa w tym czasie na urlopie. Zwerifikuj urlop pracownika i wybierz inne daty."
