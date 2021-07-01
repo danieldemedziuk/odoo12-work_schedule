@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="module_work_schedule_category" model="ir.module.category">
+        <field name="name">Work Schedule</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="group_work_schedule_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_work_schedule_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">The user will be able to see work schedule created by managers.</field>
+    </record>
+
+    <record id="group_work_schedule_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_work_schedule_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_work_schedule_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">The manager will be able to create work schedule.</field>
+    </record>
+
+
+
+
+
+
+<!--    <record id="group_work_schedule_manager" model="res.groups">-->
+<!--        <field name="name">Work Schedule / Manager</field>-->
+<!--    &lt;!&ndash;        <field name="category_id" ref="module_it_devices"/>&ndash;&gt;-->
+<!--        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>-->
+<!--        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>-->
+<!--        <field name="comment">The manager will be able to create and manage work schedule.</field>-->
+<!--    </record>-->
+
+</odoo>

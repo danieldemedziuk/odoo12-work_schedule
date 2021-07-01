@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_work_schedule_user,work schedule model,model_work_schedule_model,work_schedule.group_work_schedule_user,1,0,0,0
+access_work_schedule_involvement_user,work schedule involvement,model_work_schedule_involvement,work_schedule.group_work_schedule_user,1,0,0,0
+
+access_work_schedule_manager,work schedule model,model_work_schedule_model,work_schedule.group_work_schedule_manager,1,1,1,1
+access_work_schedule_involvement_manager,work schedule involvement,model_work_schedule_involvement,work_schedule.group_work_schedule_manager,1,1,1,1
