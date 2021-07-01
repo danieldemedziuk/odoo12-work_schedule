@@ -3,7 +3,7 @@
     'name': 'Work schedule',
     'version': '1.0',
     'author': 'DSquare Net',
-    'sequence': 110,
+    'sequence': 90,
     'summary': 'Projects, Employees, Schedule',
     'description': """
 Work schedule of employees

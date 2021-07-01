@@ -38,13 +38,6 @@ class work_schedule(models.Model):
     holiday = fields.Many2one('hr.leave', string="Holiday")
     state = fields.Selection([('temp', 'Temporary'), ('regular', 'Regular')], default='regular', string='State', readonly=True)
 
-    # state = fields.Selection([
-    #     ('draft', 'Draft'),
-    #     ('confirm', 'Confirm'),
-    #     ('done', 'Done'),
-    #     ('cancel', 'Cancel'),
-    # ], string='State', readonly=True, default='draft')
-
     @api.constrains('employees_ids', 'project_id', 'date_start', 'date_end')
     def _add_record(self):
         for rec in self:
@@ -172,8 +165,6 @@ class work_schedule_holidays(models.Model):
                 if rec.request_date_from <= req['date_end'] and rec.request_date_to >= req['date_start']:
                     raise UserError(_("This employee is assigned to a project on these days in the schedule. Contact your manager or administrator with the error code. \n\nError code: Collision of leave with work schedule."))
 
-        # if validation_type == 'both': this method is the first approval approval
-        # if validation_type != 'both': this method calls action_validate() below
         if any(holiday.state != 'confirm' for holiday in self):
             raise UserError(_('Leave request must be confirmed ("To Approve") in order to approve it.'))
 
@@ -203,7 +194,6 @@ class work_schedule_involvement(models.Model):
 
     @api.multi
     def check_status(self):
-        # self.ensure_one()
         data_lst = {}
         for rec in self:
             employees_set = rec.search([('employee_id', '=', rec['employee_id']['name'])], order="date_start asc")
@@ -234,12 +224,6 @@ class work_schedule_involvement(models.Model):
                         end = datetime.strptime(str(curr_involv['date_start']), "%Y-%m-%d").date()
 
                     if (start <= prev_val) and (prev_val != '2000-01-01'):
-                        # if self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]):
-                        #     curr_involv.status = 'busy'
-
-                        # if self.search([('employee_id', '=', elem[0]), ('date_end', '=', prev_val)]):
-                        #     curr_involv.status = 'busy'
-
                         if len(self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)])) == 1:
                             self.search([('employee_id', '=', elem[0]), ('date_start', '=', start), ('date_end', '=', end)]).status = 'busy'
                         else:
