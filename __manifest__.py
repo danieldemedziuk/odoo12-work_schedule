@@ -18,7 +18,7 @@ email: daniel.demedziuk@gmail.com
 """,
     'website': 'website',
     'category': 'Tool',
-    'depends': ['project', 'base', 'mail', 'hr', 'web_timeline'],
+    'depends': ['project', 'base', 'mail', 'hr_holidays', 'web_timeline'],
     'data': [
         'views/work_schedule_view.xml',
         'views/server_action.xml',
