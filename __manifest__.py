@@ -18,13 +18,19 @@ email: daniel.demedziuk@gmail.com
 """,
     'website': 'website',
     'category': 'Tool',
-    'depends': ['project', 'base', 'mail', 'hr_holidays', 'web_timeline'],
+    'depends': [
+        'project', 
+        'base', 
+        'mail', 
+        'hr_holidays', 
+        'web_timeline'
+    ],
     'data': [
         'views/work_schedule_view.xml',
         'views/server_action.xml',
         'security/work_schedule_security.xml',
         'security/ir.model.access.csv',
-        ],
+    ],
     'auto_install': False,
     'application': True,
     'installable': True,
