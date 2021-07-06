@@ -23,6 +23,8 @@ For more details please contact the author: <a href="mailto:daniel.demedziuk@gma
 Technical name: <b>work_schedule</b>
 ### Depends:
 - hr
+- hr_employee
+- hr_holidays
 - project
 - web_timeline
 
