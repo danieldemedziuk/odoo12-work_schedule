@@ -19,7 +19,7 @@ class work_schedule(models.Model):
     def _get_name_fnc(self):
         for rec in self:
             if rec.project_id:
-                rec.name = str(rec.employees_ids['employee_id'] + ' / ' + rec.project_id['name'])
+                rec.name = str(rec.employees_ids['name'] + ' / ' + rec.project_id['name'])
 
     active = fields.Boolean('Active', default=True, track_visibility="onchange", help="If the active field is set to False, it will allow you to hide the project without removing it.")
     name = fields.Char(compute="_get_name_fnc", type="char", store=True)
@@ -91,7 +91,7 @@ class work_schedule(models.Model):
                                  <img class="img img-fluid" name="image" src="/web/image/default_image.png" border="1">
                             </div>"""
 
-            rec.employee_id = rec.employees_ids['employee_id']
+            rec.employee_id = rec.employees_ids['id']
 
     @api.constrains('active')
     def _archive_project(self):
